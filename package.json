@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "api cho huuquy-trello",
   "main": "src/server.js",
-  "type": "module",
-
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "eslint": "eslint src"
+    "eslint": "eslint src",
+    "clean": "rimraf -rf build && mkdir build",
+    "build-babel": "babel ./src -d ./build/src",
+    "build": "npm run clean && npm run build-babel",
+    "production": "npm run build && node ./build/src/server.js",
+    "dev": "nodemon --exec ./node_modules/.bin/babel-node ./src/server.js"
   },
   "repository": {
     "type": "git",
@@ -21,10 +24,21 @@
   },
   "homepage": "https://github.com/PRECIOU5/Huuquy-trello-api#readme",
   "dependencies": {
+    "@babel/runtime": "^7.19.4",
     "express": "^4.18.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.19.6",
+    "@babel/node": "^7.19.1",
+    "@babel/plugin-transform-runtime": "^7.19.6",
+    "@babel/preset-env": "^7.19.4",
     "babel-eslint": "^10.1.0",
-    "eslint": "^8.26.0"
+    "babel-plugin-module-resolver": "^4.1.0",
+    "eslint": "^8.26.0",
+    "mkdirp": "^1.0.4",
+    "nodemon": "^2.0.20",
+    "rimraf": "^3.0.2",
+    "rm": "^0.1.8"
   }
 }
