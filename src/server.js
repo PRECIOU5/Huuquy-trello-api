@@ -1,13 +1,16 @@
 import express  from "express";
-import {mapOder} from '*/ultilities/Sắp xếp.js'
+import { connectDB } from "*/config/mongodb";
+import {env} from '*/config/environment'
+
 const app = express()
-const hostname = 'localhost'
-const port = 8017
+
+
+connectDB().catch(console.log)
 
 app.get('/', (req, res)=>{
     res.end('<h1> hello word <h1><hr/>')
 })
 
-app.listen(port, hostname, ()=>{
-    console.log(`hello Quy,I am running at ${hostname}:${port}/`)
+app.listen(env.PORT, env.HOST_NAME, ()=>{
+    console.log(`hello Quy,I am running at ${env.HOST_NAME}:${env.PORT}/`)
 })
