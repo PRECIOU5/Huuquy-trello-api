@@ -1,16 +1,23 @@
-import express  from "express";
-import { connectDB } from "*/config/mongodb";
-import {env} from '*/config/environment'
+import express from 'express'
+import { connectDB } from './config/mongodb'
+import { env } from '*/config/environment'
 
-const app = express()
+connectDB()
+  .then(() => console.log('đã kết nối thành công'))
+  .then(() => bootServer())
+  .catch(error => {
+    console.error(error)
+    process.exit(1)
+  })
 
+const bootServer = () => {
+  const app = express()
 
-connectDB().catch(console.log)
-
-app.get('/', (req, res)=>{
+  app.get('/test', async (req, res) => {
     res.end('<h1> hello word <h1><hr/>')
-})
+  })
 
-app.listen(env.PORT, env.HOST_NAME, ()=>{
-    console.log(`hello Quy,I am running at ${env.HOST_NAME}:${env.PORT}/`)
-})
+  app.listen(env.APP_PORT, env.APP_HOST_NAME, () => {
+    console.log(`hello Quy,I am running at ${env.APP_HOSTNAME}:${env.APP_PORT}/`)
+  })
+}
