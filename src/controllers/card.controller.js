@@ -1,9 +1,9 @@
 import { HttpStatusCode } from '*/ultilities/constants'
-import { BoardServices } from '*/services/board.service'
+import { CardServices } from '*/services/card.service'
 
 const createNew = async(req, res) => {
   try {
-    const result = await BoardServices.createNew(req.body)
+    const result = await CardServices.createNew(req.body)
     res.status(HttpStatusCode.OK).json(result)
   } catch (error) {
     console.log(error)
@@ -12,4 +12,4 @@ const createNew = async(req, res) => {
     })
   }
 }
-export const BoardController = { createNew }
+export const CardController = { createNew }
