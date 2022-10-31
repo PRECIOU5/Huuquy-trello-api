@@ -1,6 +1,9 @@
 import Joi from 'joi'
 import { getDB } from '*/config/mongodb'
 import { ObjectID } from 'bson'
+import { ObjectId } from 'mongodb'
+import { ColumnModel } from './column.model'
+import { CardModel } from './card.model'
 
 const boardCollectionName = 'boards'
 
@@ -15,7 +18,7 @@ const boardCollectionSchema= Joi.object({
 const validateSchema = async(data) => {
   return await boardCollectionSchema.validateAsync(data, { abortEarly:false })
 }
-
+// tạo mới
 const createNew = async(data) => {
   try {
     const value = await validateSchema(data)
@@ -27,4 +30,54 @@ const createNew = async(data) => {
     throw new Error(error)
   }
 }
-export const BoardModel= { createNew }
+/**
+ * 
+ * @param {string} boardID
+ * @param {string} columnID
+ */
+const pushColumnOrder= async (boardID, columnID) =>{
+  try {
+    const result = await getDB().collection(boardCollectionName).findOneAndUpdate(
+      { _id: ObjectId(boardID) },
+      { $push: {columnOrder:columnID} },
+      { returnOriginal:false }
+    )
+    return result.value
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+//lấy dữ liệu của column và card
+const getFullBoard = async(boardID) => {
+  try {
+    const result = await getDB().collection(boardCollectionName).aggregate([
+      {$match:{_id: ObjectId(boardID)}},
+
+      // {
+      //   $addFields: {
+      //     _id:{ $toString:'$_id'}
+      //   }
+      // },
+      {
+        $lookup:{
+          from: ColumnModel.columnCollectionName, // tên bảng cần lấy
+          localField: '_id',
+          foreignField:'boardID',
+          as:'columns'
+        }},
+      {
+        $lookup:{
+          from: CardModel.cardCollectionName, // tên bảng cần lấy
+          localField: '_id',
+          foreignField:'boardID',
+          as:'cards'
+        }}
+    ]).toArray()
+    // const id = result.insertedId
+    // const response = await getDB().collection(boardCollectionName).findOne({ '_id': new ObjectID(id) })
+    return result[0] || {}
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+export const BoardModel= { createNew, getFullBoard, pushColumnOrder }

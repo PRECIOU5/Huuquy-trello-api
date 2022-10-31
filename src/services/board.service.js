@@ -8,4 +8,20 @@ const createNew = async(data) => {
     throw new Error(error)
   }
 }
-export const BoardServices= { createNew }
+const getFullBoard = async(boardID) => {
+  try {
+    const board = await BoardModel.getFullBoard(boardID)
+    // add card to eeach column
+    board.columns.forEach(column =>{
+      column.cards = board.cards.filter(c => c.columnID.toString() === column._id.toString())
+    })
+    //sap xep columnOrder, cardOrder
+
+    //remove card data from board
+    delete board.cards
+    return board
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+export const BoardServices= { createNew, getFullBoard }
