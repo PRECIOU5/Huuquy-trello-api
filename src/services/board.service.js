@@ -1,4 +1,5 @@
 import { BoardModel } from '*/models/board.model'
+import { cloneDeep} from 'lodash'
 
 const createNew = async(data) => {
   try {
@@ -15,15 +16,16 @@ const getFullBoard = async(boardID) => {
     if (!board || !board.columns) {
       throw new Error('Khong co bang nao')
     }
-
+    const transformBoard = cloneDeep(board)
+    transformBoard.columns = transformBoard.columns.filter(column => !column._destroy)
     // add card to eeach column
-    board.columns.forEach(column => {
-      column.cards = board.cards.filter(c => c.columnID.toString() === column._id.toString())
+    transformBoard.columns.forEach(column => {
+      column.cards = transformBoard.cards.filter(c => c.columnID.toString() === column._id.toString())
     })
     //sap xep columnOrder, cardOrder
     //remove card data from board
-    delete board.cards
-    return board
+    delete transformBoard.cards
+    return transformBoard
   } catch (error) {
     throw new Error(error)
   }
