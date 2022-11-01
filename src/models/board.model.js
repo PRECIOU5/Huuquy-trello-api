@@ -31,15 +31,15 @@ const createNew = async(data) => {
   }
 }
 /**
- * 
+ *
  * @param {string} boardID
  * @param {string} columnID
  */
-const pushColumnOrder= async (boardID, columnID) =>{
+const pushColumnOrder= async (boardID, columnID) => {
   try {
     const result = await getDB().collection(boardCollectionName).findOneAndUpdate(
       { _id: ObjectId(boardID) },
-      { $push: {columnOrder:columnID} },
+      { $push: { columnOrder:columnID } },
       { returnOriginal:false }
     )
     return result.value
@@ -51,7 +51,10 @@ const pushColumnOrder= async (boardID, columnID) =>{
 const getFullBoard = async(boardID) => {
   try {
     const result = await getDB().collection(boardCollectionName).aggregate([
-      {$match:{_id: ObjectId(boardID)}},
+      { $match:
+        { _id: ObjectId(boardID),
+          _destroy: false
+        } },
 
       // {
       //   $addFields: {
@@ -64,14 +67,14 @@ const getFullBoard = async(boardID) => {
           localField: '_id',
           foreignField:'boardID',
           as:'columns'
-        }},
+        } },
       {
         $lookup:{
           from: CardModel.cardCollectionName, // tên bảng cần lấy
           localField: '_id',
           foreignField:'boardID',
           as:'cards'
-        }}
+        } }
     ]).toArray()
     // const id = result.insertedId
     // const response = await getDB().collection(boardCollectionName).findOne({ '_id': new ObjectID(id) })
