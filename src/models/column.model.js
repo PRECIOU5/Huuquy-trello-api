@@ -8,7 +8,7 @@ const columnCollectionName = 'columns'
 
 const columnCollectionSchema= Joi.object({
   boardID: Joi.string().required(),
-  title: Joi.string().required().min(3).max(20).trim(),
+  title: Joi.string().required().min(3).max(30).trim(),
   cardOrder: Joi.array().items(Joi.string()).default([]),
   createdAt: Joi.date().timestamp().default(Date.now()),
   updatedAt: Joi.date().timestamp().default(null),
@@ -39,15 +39,15 @@ const createNew = async(data) => {
 }
 
 /**
- * 
+ *
  * @param {string} columnID
  * @param {string} cardID
  */
- const pushCardOrder= async (columnID, cardID) =>{
+const pushCardOrder= async (columnID, cardID) => {
   try {
     const result = await getDB().collection(columnCollectionName).findOneAndUpdate(
       { _id: ObjectId(columnID) },
-      { $push: {cardOrder: cardID} },
+      { $push: { cardOrder: cardID } },
       { returnOriginal:false }
     )
 
@@ -59,10 +59,8 @@ const createNew = async(data) => {
 
 const update = async(id, data) => {
   try {
-    const updateData ={
-      ...data,
-      boardID:ObjectId(data.boardID)
-    }
+    const updateData ={ ...data }
+    if (data.boardID) updateData.boardID = ObjectId(data.boardID)
     const result = await getDB().collection(columnCollectionName).findOneAndUpdate(
       { _id: ObjectId(id) },
       { $set: updateData },
@@ -74,4 +72,4 @@ const update = async(id, data) => {
   }
 }
 
-export const ColumnModel= {columnCollectionName, createNew, update, pushCardOrder }
+export const ColumnModel= { columnCollectionName, createNew, update, pushCardOrder }
