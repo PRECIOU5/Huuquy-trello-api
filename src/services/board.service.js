@@ -16,6 +16,7 @@ const getFullBoard = async(boardID) => {
     if (!board || !board.columns) {
       throw new Error('Khong co bang nao')
     }
+    
     const transformBoard = cloneDeep(board)
     transformBoard.columns = transformBoard.columns.filter(column => !column._destroy)
     // add card to eeach column
@@ -30,4 +31,19 @@ const getFullBoard = async(boardID) => {
     throw new Error(error)
   }
 }
-export const BoardServices= { createNew, getFullBoard }
+
+const update = async(id, data) => {
+  try {
+    const updateData= {
+      ...data,
+      updatedAt: Date.now()
+    }
+    if (updateData._id) delete updateData._id
+    if (updateData.columns) delete updateData.cards
+    const updatedBoard = await BoardModel.update(id, updateData)
+    return updatedBoard
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+export const BoardServices= { createNew, getFullBoard, update }
