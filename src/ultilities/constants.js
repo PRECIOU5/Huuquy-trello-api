@@ -6,6 +6,7 @@ export const HttpStatusCode={
   INTERNAL_SERVER: 500
 }
 export const WHITELIST_DOMAINS = [
-  'http://localhost:3000', 
-  'http://localhost:3001'
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:3002'
 ]
