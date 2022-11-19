@@ -4,6 +4,7 @@ import { connectDB } from "./config/mongodb";
 import { env } from "*/config/environment";
 import { apiV1 } from "*/routes/v1";
 import { corsOptions } from "*/config/cors";
+import userRoute from "./routes/v1/user.route";
 
 connectDB()
   .then(() => console.log("đã kết nối thành công"))
@@ -22,6 +23,7 @@ const bootServer = () => {
   app.use(express.json());
   //Use API
   app.use("/v1", apiV1);
+  app.use("/api/users", userRoute);
   app.listen(env.APP_PORT, env.APP_HOST_NAME, () => {
     console.log(
       `hello Quy,I am running at ${env.APP_HOSTNAME}:${env.APP_PORT}/`

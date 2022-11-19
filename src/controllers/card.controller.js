@@ -6,7 +6,7 @@ const createNew = async(req, res) => {
     const result = await CardServices.createNew(req.body)
     res.status(HttpStatusCode.OK).json(result)
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     res.status(HttpStatusCode.INTERNAL_SERVER).json({
       errors: error.message
     })
