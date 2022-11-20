@@ -72,4 +72,13 @@ userRoute.post("/invite/:id", async (req, res) => {
   return res.send("OK");
 });
 
+userRoute.post("/add-board/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  const user = await User.findById({ _id: userId }).exec();
+  const board = await BoardModel.createNew({ ...req.body });
+  user.boards.push(board);
+  await user.save();
+  return res.send(board);
+});
+
 export default userRoute;
