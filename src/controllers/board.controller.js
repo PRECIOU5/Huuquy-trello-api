@@ -1,5 +1,6 @@
 import { HttpStatusCode } from "*/ultilities/constants";
 import { BoardServices } from "*/services/board.service";
+import { BoardModel } from "../models/board.model";
 
 const createNew = async (req, res) => {
   try {
@@ -36,4 +37,17 @@ const update = async (req, res) => {
     });
   }
 };
-export const BoardController = { createNew, getFullBoard, update };
+
+export const deleteBoard = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await BoardModel.deleteBoard(id);
+    res.status(HttpStatusCode.OK).send(result);
+  } catch (error) {
+    res.status(HttpStatusCode.INTERNAL_SERVER).json({
+      errors: error.message,
+    });
+  }
+};
+
+export const BoardController = { createNew, getFullBoard, update, deleteBoard };

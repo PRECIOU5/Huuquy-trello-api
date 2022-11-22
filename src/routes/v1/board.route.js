@@ -1,15 +1,18 @@
-import express from 'express'
-import { BoardController } from '*/controllers/board.controller'
-import { BoardValidation } from '*/validations/board.validation'
+import express from "express";
+import { BoardController } from "*/controllers/board.controller";
+import { BoardValidation } from "*/validations/board.validation";
 
-const router = express.Router()
+const router = express.Router();
 
-router.route('/')
+router
+  .route("/")
 
-  .post(BoardValidation.createNew, BoardController.createNew)
+  .post(BoardValidation.createNew, BoardController.createNew);
 
-  router.route('/:id')
+router
+  .route("/:id")
 
   .get(BoardController.getFullBoard)
   .put(BoardValidation.update, BoardController.update)
-export const boardRouters = router
+  .delete(BoardController.deleteBoard);
+export const boardRouters = router;
