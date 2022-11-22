@@ -36,6 +36,18 @@ const createNew = async (data) => {
   }
 };
 
+export const deleteBoard = async (id) => {
+  try {
+    const result = await getDB()
+      .collection(boardCollectionName)
+      .deleteOne({ __id: id });
+
+    return "OK";
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const update = async (id, data) => {
   try {
     const updateData = { ...data };
@@ -110,4 +122,10 @@ const getFullBoard = async (boardID) => {
   }
 };
 
-export const BoardModel = { createNew, getFullBoard, pushColumnOrder, update };
+export const BoardModel = {
+  createNew,
+  getFullBoard,
+  pushColumnOrder,
+  update,
+  deleteBoard,
+};
